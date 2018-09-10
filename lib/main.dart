@@ -22,79 +22,213 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  String num1='';
+  String num2= '';
+  String sudoOutput='';
+  String output='';
+  String expression='';
+  bool isSecondNum=false;
+  void onNumberPressed(String c){
+    setState(() {
+          if(isSecondNum)
+          {
+           num2=num2+c;
+           output=num2;
+          }
+          else{
+            num1+=c;
+            output=num1;
+          }
+        });
+  }
+  void onExpressionPressed(String c){
+    isSecondNum=true;
+    expression=c;
+    sudoOutput=num1+expression;
+  }
+  void calculateOutput(){
+    //here will be the main logic for calculator
+    double out;
+    if(expression=='+')
+    out= double.parse(num1)+double.parse(num2);
+    if(expression=='-')
+    out= double.parse(num1)-double.parse(num2);
+    if(expression=='/')
+    out= double.parse(num1) / double.parse(num2);
+    if(expression=='*')
+    out= double.parse(num1)+double.parse(num2);
+    output='$out';
+    print(output);
+  }
+
+  void onDelete(){
+    if(isSecondNum)
+    num2 = num2.substring(0,num2.length-1);
+    else
+    num1 = num1.substring(0,num2.length-1);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('text'),
+        title: Text('Calculator'),
       ),
       body: Container(
         padding: EdgeInsets.all(32.0),
         child: Center(
-          child: Column(
+          child: Container(
+            padding : EdgeInsets.all(8.0),
+            child:Column(
+              mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new TextField(
-               keyboardType: TextInputType.number,
+              new Text(sudoOutput,
+             maxLines: 1,
+             style: new TextStyle(
+               fontSize: 25.0,
+             ),
               ),
-              new Row(
+              new Text(output,
+             maxLines: 1,
+             style: new TextStyle(
+               fontSize: 45.0,
+             ),
+              ),
+              new Container(
+                padding: EdgeInsets.all(8.0),
+                child: new Row(
                children: <Widget>[
                  new RaisedButton(
-                   onPressed: null,
+                   onPressed: ()=>onNumberPressed('1'),
                    child: new Text('1'),
                    color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
+                   
                  ),
                  new RaisedButton(
-                   onPressed: null,
+                   onPressed: ()=>onNumberPressed('2'),
                    child: new Text('2'),
                    color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
                  ),
                  new RaisedButton(
-                   onPressed: null,
+                   onPressed: ()=>onNumberPressed('3'),
                    child: new Text('3'),
                    color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
                  ),
                ],
               ),
-              new Row(
+              ),
+              new Container(
+               padding: EdgeInsets.all(8.0),
+               child: new Row(
                children: <Widget>[
                  new RaisedButton(
-                   onPressed: null,
+                   onPressed: ()=>onNumberPressed('4'),
                    child: new Text('4'),
                    color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
                  ),
                  new RaisedButton(
-                   onPressed: null,
+                   onPressed: ()=>onNumberPressed('5'),
                    child: new Text('5'),
                    color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
                  ),
                  new RaisedButton(
-                   onPressed: null,
+                   onPressed: ()=>onNumberPressed('6'),
                    child: new Text('6'),
                    color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
                  ),
                ],
               ),
-              new Row(
+              ),
+              new Container(
+                padding: EdgeInsets.all(8.0),
+                child: new Row(
                children: <Widget>[
                  new RaisedButton(
-                   onPressed: null,
+                   onPressed: ()=>onNumberPressed('7'),
                    child: new Text('7'),
                    color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
                  ),
                  new RaisedButton(
-                   onPressed: null,
+                   onPressed: ()=>onNumberPressed('8'),
                    child: new Text('8'),
                    color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
                  ),
                  new RaisedButton(
-                   onPressed: null,
+                   onPressed: ()=>onNumberPressed('9'),
                    child: new Text('9'),
                    color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
                  ),
                ],
+              )
               ),
+              new Container(
+                padding: EdgeInsets.all(8.0),
+                child: new Row(
+               children: <Widget>[
+                 new RaisedButton(
+                   onPressed: ()=>onNumberPressed('0'),
+                   child: new Text('0'),
+                   color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
+                 ),
+                 new RaisedButton(
+                   onPressed: ()=>onExpressionPressed('+'),
+                   child: new Text('+'),
+                   color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
+                 ),
+                 new RaisedButton(
+                   onPressed:calculateOutput,
+                   child: new Text('='),
+                   color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
+                 ),
+               ],
+              )
+              ),
+               new Container(
+                padding: EdgeInsets.all(8.0),
+                child: new Row(
+               children: <Widget>[
+                 new RaisedButton(
+                   onPressed: ()=>onExpressionPressed('-'),
+                   child: new Text('-'),
+                   color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
+                 ),
+                 new RaisedButton(
+                   onPressed: ()=>onExpressionPressed('/'),
+                   child: new Text('/'),
+                   color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
+                 ),
+                 new RaisedButton(
+                   onPressed:()=>onExpressionPressed('*'),
+                   child: new Text('*'),
+                   color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
+                 ),
+               ],
+              )
+              ),
+              new RaisedButton(
+                   onPressed:()=>onDelete,
+                   child: new Text('<='),
+                   color: Colors.red,
+                   padding: EdgeInsets.all(8.0),
+                 ),
             ],
           ),
+          )
         ),
       ),
     );
