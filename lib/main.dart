@@ -22,52 +22,77 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  String num1='';
-  String num2= '';
-  String sudoOutput='';
-  String output='';
-  String expression='';
-  bool isSecondNum=false;
-  void onNumberPressed(String c){
+  String num1 = '';
+  String sudoOutput = '';
+  String output = '';
+  String expression = '';
+  String outputDisplay = '';
+  bool isSecondNum = false;
+  void onNumberPressed(String c) {
     setState(() {
-          if(isSecondNum)
-          {
-           num2=num2+c;
-           output=num2;
-          }
-          else{
-            num1+=c;
-            output=num1;
-          }
-        });
-  }
-  void onExpressionPressed(String c){
-    isSecondNum=true;
-    expression=c;
-    sudoOutput=num1+expression;
-  }
-  void calculateOutput(){
-    //here will be the main logic for calculator
-    double out;
-    if(expression=='+')
-    out= double.parse(num1)+double.parse(num2);
-    if(expression=='-')
-    out= double.parse(num1)-double.parse(num2);
-    if(expression=='/')
-    out= double.parse(num1) / double.parse(num2);
-    if(expression=='*')
-    out= double.parse(num1)+double.parse(num2);
-    output='$out';
-    print(output);
+      if (isSecondNum) {
+        output = output + c;
+        outputDisplay = output;
+      } else {
+        num1 += c;
+        outputDisplay = num1;
+      }
+    });
   }
 
-  void onDelete(){
-    if(isSecondNum)
-    num2 = num2.substring(0,num2.length-1);
-    else
-    num1 = num1.substring(0,num2.length-1);
+  void onExpressionPressed(String c) {
+    setState(() {
+      expression = c;
+      if (isSecondNum)
+        sudoOutput = output + expression;
+      else
+        sudoOutput = num1 + expression;
+      isSecondNum = true;
+      if (outputDisplay != '' && output != '' && expression != '')
+        calculateOutput();
+    });
   }
+
+  void calculateOutput() {
+    //here will be the main logic for calculator
+    setState(() {
+      double out;
+      sudoOutput = num1 + expression + output;
+      if (expression == '+') out = double.parse(num1) + double.parse(output);
+      if (expression == '-') out = double.parse(num1) - double.parse(output);
+      if (expression == '/') out = double.parse(num1) / double.parse(output);
+      if (expression == '*') out = double.parse(num1) * double.parse(output);
+      output = '$out';
+      outputDisplay = output;
+      print(output);
+      num1 = output;
+      output = '';
+      expression = '';
+    });
+  }
+
+  void allDelete() {
+    setState(() {
+      num1 = '';
+      sudoOutput = '';
+      output = '';
+      expression = '';
+      outputDisplay = '';
+      isSecondNum = false;
+    });
+  }
+
+  void onDelete() {
+    setState(() {
+      if (isSecondNum)
+        output = output.substring(0, output.length - 1);
+      else
+        num1 = num1.substring(0, output.length - 1);
+      outputDisplay = outputDisplay.substring(0, output.length - 1);
+      print(output);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,159 +102,167 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         padding: EdgeInsets.all(32.0),
         child: Center(
-          child: Container(
-            padding : EdgeInsets.all(8.0),
-            child:Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Container(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Text(sudoOutput,
-             maxLines: 1,
-             style: new TextStyle(
-               fontSize: 25.0,
-             ),
+              new Text(
+                sudoOutput,
+                maxLines: 1,
+                style: new TextStyle(
+                  fontSize: 25.0,
+                ),
               ),
-              new Text(output,
-             maxLines: 1,
-             style: new TextStyle(
-               fontSize: 45.0,
-             ),
-              ),
-              new Container(
-                padding: EdgeInsets.all(8.0),
-                child: new Row(
-               children: <Widget>[
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('1'),
-                   child: new Text('1'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                   
-                 ),
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('2'),
-                   child: new Text('2'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('3'),
-                   child: new Text('3'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-               ],
-              ),
-              ),
-              new Container(
-               padding: EdgeInsets.all(8.0),
-               child: new Row(
-               children: <Widget>[
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('4'),
-                   child: new Text('4'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('5'),
-                   child: new Text('5'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('6'),
-                   child: new Text('6'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-               ],
-              ),
+              new Text(
+                outputDisplay,
+                maxLines: 1,
+                style: new TextStyle(
+                  fontSize: 45.0,
+                ),
               ),
               new Container(
                 padding: EdgeInsets.all(8.0),
                 child: new Row(
-               children: <Widget>[
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('7'),
-                   child: new Text('7'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('8'),
-                   child: new Text('8'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('9'),
-                   child: new Text('9'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-               ],
-              )
+                  children: <Widget>[
+                    new RaisedButton(
+                      onPressed: () => onNumberPressed('1'),
+                      child: new Text('1'),
+                      color: Colors.red,
+                      padding: EdgeInsets.all(8.0),
+                    ),
+                    new RaisedButton(
+                      onPressed: () => onNumberPressed('2'),
+                      child: new Text('2'),
+                      color: Colors.red,
+                      padding: EdgeInsets.all(8.0),
+                    ),
+                    new RaisedButton(
+                      onPressed: () => onNumberPressed('3'),
+                      child: new Text('3'),
+                      color: Colors.red,
+                      padding: EdgeInsets.all(8.0),
+                    ),
+                  ],
+                ),
               ),
               new Container(
                 padding: EdgeInsets.all(8.0),
                 child: new Row(
-               children: <Widget>[
-                 new RaisedButton(
-                   onPressed: ()=>onNumberPressed('0'),
-                   child: new Text('0'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-                 new RaisedButton(
-                   onPressed: ()=>onExpressionPressed('+'),
-                   child: new Text('+'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-                 new RaisedButton(
-                   onPressed:calculateOutput,
-                   child: new Text('='),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-               ],
-              )
+                  children: <Widget>[
+                    new RaisedButton(
+                      onPressed: () => onNumberPressed('4'),
+                      child: new Text('4'),
+                      color: Colors.red,
+                      padding: EdgeInsets.all(8.0),
+                    ),
+                    new RaisedButton(
+                      onPressed: () => onNumberPressed('5'),
+                      child: new Text('5'),
+                      color: Colors.red,
+                      padding: EdgeInsets.all(8.0),
+                    ),
+                    new RaisedButton(
+                      onPressed: () => onNumberPressed('6'),
+                      child: new Text('6'),
+                      color: Colors.red,
+                      padding: EdgeInsets.all(8.0),
+                    ),
+                  ],
+                ),
               ),
-               new Container(
-                padding: EdgeInsets.all(8.0),
-                child: new Row(
-               children: <Widget>[
-                 new RaisedButton(
-                   onPressed: ()=>onExpressionPressed('-'),
-                   child: new Text('-'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-                 new RaisedButton(
-                   onPressed: ()=>onExpressionPressed('/'),
-                   child: new Text('/'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-                 new RaisedButton(
-                   onPressed:()=>onExpressionPressed('*'),
-                   child: new Text('*'),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
-               ],
-              )
-              ),
-              new RaisedButton(
-                   onPressed:()=>onDelete,
-                   child: new Text('<='),
-                   color: Colors.red,
-                   padding: EdgeInsets.all(8.0),
-                 ),
+              new Container(
+                  padding: EdgeInsets.all(8.0),
+                  child: new Row(
+                    children: <Widget>[
+                      new RaisedButton(
+                        onPressed: () => onNumberPressed('7'),
+                        child: new Text('7'),
+                        color: Colors.red,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                      new RaisedButton(
+                        onPressed: () => onNumberPressed('8'),
+                        child: new Text('8'),
+                        color: Colors.red,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                      new RaisedButton(
+                        onPressed: () => onNumberPressed('9'),
+                        child: new Text('9'),
+                        color: Colors.red,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                    ],
+                  )),
+              new Container(
+                  padding: EdgeInsets.all(8.0),
+                  child: new Row(
+                    children: <Widget>[
+                      new RaisedButton(
+                        onPressed: () => onNumberPressed('0'),
+                        child: new Text('0'),
+                        color: Colors.red,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                      new RaisedButton(
+                        onPressed: () => onExpressionPressed('+'),
+                        child: new Text('+'),
+                        color: Colors.red,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                      new RaisedButton(
+                        onPressed: calculateOutput,
+                        child: new Text('='),
+                        color: Colors.red,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                    ],
+                  )),
+              new Container(
+                  padding: EdgeInsets.all(8.0),
+                  child: new Row(
+                    children: <Widget>[
+                      new RaisedButton(
+                        onPressed: () => onExpressionPressed('-'),
+                        child: new Text('-'),
+                        color: Colors.red,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                      new RaisedButton(
+                        onPressed: () => onExpressionPressed('/'),
+                        child: new Text('/'),
+                        color: Colors.red,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                      new RaisedButton(
+                        onPressed: () => onExpressionPressed('*'),
+                        child: new Text('*'),
+                        color: Colors.red,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                    ],
+                  )),
+              new Container(
+                  child: new Row(
+                children: <Widget>[
+                  new RaisedButton(
+                    onPressed: () => allDelete,
+                    child: new Text('C'),
+                    color: Colors.red,
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  new RaisedButton(
+                    onPressed: () => onDelete,
+                    child: new Text('<='),
+                    color: Colors.red,
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                ],
+              ))
             ],
           ),
-          )
-        ),
+        )),
       ),
     );
   }
