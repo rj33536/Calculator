@@ -22,11 +22,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String num1 = '';
-  String sudoOutput = '';
-  String output = '';
-  String expression = '';
-  String outputDisplay = '';
+  String num1 = '0';
+  String sudoOutput = '0';
+  String output = '0';
+  String expression = '0';
+  String outputDisplay = '0';
   bool isSecondNum = false;
   void onNumberPressed(String c) {
     setState(() {
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
       else
         sudoOutput = num1 + expression;
       isSecondNum = true;
-      if (outputDisplay != '' && output != '' && expression != '')
+      if (outputDisplay != '0' && output != '0' && expression != '0')
         calculateOutput();
     });
   }
@@ -63,32 +63,43 @@ class _MyHomePageState extends State<MyHomePage> {
       if (expression == '/') out = double.parse(num1) / double.parse(output);
       if (expression == '*') out = double.parse(num1) * double.parse(output);
       output = '$out';
+      if(output==null)
+      output='0';
       outputDisplay = output;
       print(output);
       num1 = output;
-      output = '';
-      expression = '';
+      output = '0';
+      expression = '0';
+      if(outputDisplay==null)
+      outputDisplay='0';
     });
   }
 
   void allDelete() {
     setState(() {
-      num1 = '';
-      sudoOutput = '';
-      output = '';
-      expression = '';
-      outputDisplay = '';
+      num1 = '0';
+      sudoOutput = '0';
+      output = '0';
+      expression = '0';
+      outputDisplay = '0';
       isSecondNum = false;
     });
   }
 
   void onDelete() {
     setState(() {
-      if (isSecondNum)
+      if (isSecondNum){
+        if(output.length==0)
+        output='0';
         output = output.substring(0, output.length - 1);
-      else
+        
+      }
+      else{
+        if(num1.length==0)
+        num1='0';
         num1 = num1.substring(0, output.length - 1);
-      outputDisplay = outputDisplay.substring(0, output.length - 1);
+      }
+      outputDisplay = outputDisplay.substring(0, outputDisplay.length - 1);
       print(output);
     });
   }
@@ -247,14 +258,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: new Row(
                 children: <Widget>[
                   new RaisedButton(
-                    onPressed: () => allDelete,
+                    onPressed:allDelete,
                     child: new Text('C'),
                     color: Colors.red,
                     padding: EdgeInsets.all(8.0),
                   ),
                   new RaisedButton(
-                    onPressed: () => onDelete,
+                    onPressed: onDelete,
                     child: new Text('<='),
+                    color: Colors.red,
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  new RaisedButton(
+                    onPressed: ()=>onNumberPressed('.'),
+                    child: new Text('.'),
                     color: Colors.red,
                     padding: EdgeInsets.all(8.0),
                   ),
